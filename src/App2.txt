@@ -1,0 +1,312 @@
+import React from "react";
+import { Responsive, WidthProvider } from "react-grid-layout";
+
+import classes from "./App.module.scss";
+
+const App = () => {
+  const ResponsiveGridLayout = WidthProvider(Responsive);
+  const layout = [
+    { i: "blue-eyes-dragon", x: 0, y: 0, w: 1, h: 1 },
+    { i: "dark-magician", x: 1, y: 0, w: 1, h: 1 },
+    { i: "kuriboh", x: 2, y: 0, w: 1, h: 1 },
+    { i: "spell-caster", x: 3, y: 0, w: 1, h: 1 },
+    { i: "summoned-skull", x: 4, y: 0, w: 1, h: 1 },
+  ];
+
+  const getLayouts = () => {
+    const savedLayouts = localStorage.getItem("grid-layout");
+    //console.log(JSON.parse(savedLayouts));
+
+    return savedLayouts ? JSON.parse(savedLayouts) : { lg: layout };
+  };
+  // styled-components definition removed for brevity...
+  const handleLayoutChange = (layout, layouts) => {
+    //console.log(layouts);
+    localStorage.setItem("grid-layout", JSON.stringify(layouts));
+  };
+
+  return (
+    <div className={classes.Root}>
+      <ResponsiveGridLayout
+        layouts={getLayouts()}
+        breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
+        cols={{ lg: 5, md: 4, sm: 3, xs: 2, xxs: 1 }}
+        rowHeight={300}
+        width={1000}
+        className={classes.GridLayout}
+        onLayoutChange={handleLayoutChange}
+      >
+        <div className={classes.GridItemWrapper} key="blue-eyes-dragon">
+          <div className={classes.GridItemContent}>Blue Eyes Dragon</div>
+        </div>
+        <div className={classes.GridItemWrapper} key="dark-magician">
+          <div className={classes.GridItemContent}>Dark Magician</div>
+        </div>
+        <div className={classes.GridItemWrapper} key="kuriboh">
+          <div className={classes.GridItemContent}>Kuriboh</div>
+        </div>
+        <div className={classes.GridItemWrapper} key="spell-caster">
+          <div className={classes.GridItemContent}>Spell Caster</div>
+        </div>
+        <div className={classes.GridItemWrapper} key="summoned-skull">
+          <div className={classes.GridItemContent}>Summoned Skull</div>
+        </div>
+      </ResponsiveGridLayout>
+    </div>
+  );
+};
+
+export default App;
+
+--------------------------------------------
+--------------------------------------------
+
+import React, { useState } from "react";
+import { Responsive, WidthProvider } from "react-grid-layout";
+import "react-grid-layout/css/styles.css";
+import "react-resizable/css/styles.css";
+
+import "./App.css";
+
+const ResponsiveReactGridLayout = WidthProvider(Responsive);
+
+const App = () => {
+  const [layouts, setLayouts] = useState(null);
+  const [widgets, setWidgets] = useState([
+    { i: "widget1", x: 0, y: 0, w: 2, h: 2, data: 1 },
+    { i: "widget2", x: 2, y: 0, w: 2, h: 2, data: 2 },
+    { i: "widget3", x: 4, y: 0, w: 2, h: 2, data: 3 },
+  ]);
+
+  const handleModify = (layoutL, layoutsL) => {
+    console.log('handleModify');
+    
+    setWidgets(layoutsL['lg']);
+  };
+
+  const handleAdd = () => {
+    const newData = widgets.length ? widgets[widgets.length - 1].data + 1 : 1;
+    const newWidget = {
+      i: `widget${newData}`,
+      x: 0,
+      y: 0,
+      w: 2,
+      h: 2,
+      data: newData,
+    };
+    setWidgets([...widgets, newWidget]);
+  };
+
+  const handleDelete = (key) => {
+    const updatedWidgets = widgets.filter((widget) => widget.i !== key);
+    setWidgets(updatedWidgets);
+  };
+
+  return (
+    <div>
+      <button onClick={handleAdd}>Add Widget</button>
+
+      <ResponsiveReactGridLayout
+        onLayoutChange={handleModify}
+        layout={layouts}
+        breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
+        cols={{ lg: 8, md: 8, sm: 4, xs: 2, xxs: 2 }}
+        margin={{
+          lg: [20, 20],
+          md: [20, 20],
+          sm: [20, 20],
+          xs: [20, 20],
+          xxs: [20, 20],
+        }}
+        style={{ backgroundColor: "cyan" }}
+      >
+        {/* {widgets.map((widget) => (
+          <div
+            className="reactGridItem"
+            key={widget.i}
+            data-grid={{
+              x: widget.x,
+              y: widget.y,
+              w: widget.w,
+              h: widget.h,
+              i: widget.i,
+              minW: 2,
+              maxW: Infinity,
+              minH: 2,
+              maxH: Infinity,
+            }}
+          >
+            <button
+              className="deleteButton"
+              onClick={() => handleDelete(widget.i)}
+            >
+              x
+            </button>
+            <div>{widget.i}</div>
+          </div>
+        ))} */}
+      </ResponsiveReactGridLayout>
+    </div>
+  );
+};
+
+export default App;
+
+
+
+--------------------------------------------
+--------------------------------------------
+
+
+
+import React from "react";
+import { Responsive, WidthProvider } from "react-grid-layout";
+
+import classes from "./App.module.scss";
+
+const App = () => {
+  const ResponsiveGridLayout = WidthProvider(Responsive);
+  const pokemonData = {
+    1: {
+      id: "1",
+      name: "Bulbasaur",
+      img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png",
+    },
+    4: {
+      id: "4",
+      name: "Charmander",
+      img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png",
+    },
+    7: {
+      id: "7",
+      name: "Squirtle",
+      img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png",
+    },
+  };
+  const pokemonId = ["1", "4", "7"];
+  const layout = [
+    { i: "1", x: 0, y: 0, w: 1, h: 1 },
+    { i: "4", x: 1, y: 0, w: 1, h: 1 },
+    { i: "7", x: 2, y: 0, w: 1, h: 1 },
+  ];
+
+  const getLayouts = () => {
+    const savedLayouts = localStorage.getItem("grid-layout");
+    console.log("getLayouts");
+    console.log(JSON.parse(savedLayouts));
+
+    return savedLayouts ? JSON.parse(savedLayouts) : { lg: layout };
+  };
+  
+  const handleLayoutChange = (layout, layouts) => {
+    console.log("handleLayoutChange");
+    console.log(layouts);
+    localStorage.setItem("grid-layout", JSON.stringify(layouts));
+  };
+
+  return (
+    <div className={classes.Root}>
+      <ResponsiveGridLayout
+        layouts={getLayouts()}
+        breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
+        cols={{ lg: 5, md: 4, sm: 3, xs: 2, xxs: 1 }}
+        rowHeight={300}
+        width={1000}
+        className={classes.GridLayout}
+        onLayoutChange={handleLayoutChange}
+      >
+        {pokemonId.map((ID) => {
+          return (
+            <div className={classes.GridItemWrapper} key={ID}>
+              <div className={classes.GridItemContent}>
+                {pokemonData[ID].name}
+              </div>
+              <img alt="pokemon" src={pokemonData[ID].img} />
+            </div>
+          );
+        })}
+      </ResponsiveGridLayout>
+    </div>
+  );
+};
+
+export default App;
+
+
+--------------------------------------------
+Made Changes
+--------------------------------------------
+
+
+import React, { useState } from "react";
+import { Responsive, WidthProvider } from "react-grid-layout";
+
+import classes from "./App.module.scss";
+
+const App = () => {
+  const ResponsiveGridLayout = WidthProvider(Responsive);
+  
+  const [newBreakpoint, setNewBreakpoint] = useState('lg');
+  const [layout, setLayout] = useState({
+    lg: [
+      { i: "blue-eyes-dragon", x: 0, y: 0, w: 1, h: 1 },
+      { i: "dark-magician", x: 1, y: 0, w: 1, h: 1 },
+      { i: "kuriboh", x: 4, y: 0, w: 1, h: 1 },
+    ],
+    md: [
+      { i: "blue-eyes-dragon", x: 0, y: 0, w: 1, h: 1 },
+      { i: "dark-magician", x: 1, y: 0, w: 1, h: 1 },
+      { i: "kuriboh", x: 0, y: 0, w: 1, h: 1 },
+    ],
+    sm: [],
+    xs: [],
+    xxs: [],
+  });
+
+  const handleLayoutChange = (layoutz, layouts) => {
+
+  };
+
+  const DragStop = (layouts) => {
+    console.log("DragStop");
+    console.log(layouts);
+    setLayout((prevState) => {
+      return {
+        ...prevState,
+        [newBreakpoint]: [...layouts]
+      }
+    });
+  };
+
+  const handleBreakpointChange = (Breakpoint, layout) => {
+    setNewBreakpoint(Breakpoint);
+  };
+
+  return (
+    <div className={classes.Root}>
+      <ResponsiveGridLayout
+        layouts={layout}
+        breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
+        cols={{ lg: 5, md: 4, sm: 3, xs: 2, xxs: 1 }}
+        rowHeight={300}
+        width={1000}
+        className={classes.GridLayout}
+        onLayoutChange={handleLayoutChange}
+        onBreakpointChange={handleBreakpointChange}
+        onDragStop={DragStop}
+      >
+        <div className={classes.GridItemWrapper} key="blue-eyes-dragon">
+          <div className={classes.GridItemContent}>Blue Eyes Dragon</div>
+        </div>
+        <div className={classes.GridItemWrapper} key="dark-magician">
+          <div className={classes.GridItemContent}>Dark Magician</div>
+        </div>
+        <div className={classes.GridItemWrapper} key="kuriboh">
+          <div className={classes.GridItemContent}>Kuriboh</div>
+        </div>
+      </ResponsiveGridLayout>
+    </div>
+  );
+};
+
+export default App;
